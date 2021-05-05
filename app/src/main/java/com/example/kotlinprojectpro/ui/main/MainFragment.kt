@@ -69,7 +69,7 @@ class MainFragment : Fragment() {
     private fun generateCenterText(): SpannableString? {
         val s = SpannableString("Wydatki\ndzisiejsze")
         s.setSpan(RelativeSizeSpan(2f), 0, 8, 0)
-        s.setSpan(ForegroundColorSpan(Color.WHITE), 0, 8, 0)
+        s.setSpan(ForegroundColorSpan(Color.parseColor("#FF03DAC5")), 0, 8, 0)
         s.setSpan(ForegroundColorSpan(Color.GRAY), 8, s.length, 0)
         return s
     }
