@@ -15,12 +15,15 @@ import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlinprojectpro.R
+import com.example.kotlinprojectpro.getColorForName
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.main_fragment.*
-import kotlinx.android.synthetic.main.popup_create.*
 
 
 class MainFragment : Fragment() {
@@ -41,13 +44,27 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         chart.description.isEnabled = false
-        chart.centerText = generateCenterText()
+        chart.centerText = generateCenterText("1771")
         chart.setCenterTextSize(16f)
         chart.holeRadius = 50f
+
         chart.setHoleColor(0)
         chart.legend.isEnabled = false
+        chart.animateY(2000);
         chart.transparentCircleRadius = 50f
         chart.setEntryLabelTextSize(20f)
+
+        chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+            override fun onValueSelected(e: Entry?, h: Highlight?) {
+                val pe = e as PieEntry
+                chart.centerText = generateCenterText(pe.label+"\nKWIECIEŃ")
+            }
+
+            override fun onNothingSelected() {
+                chart.centerText = generateCenterText("1771\nWYDANE")
+            }
+        })
+
         val l = chart.legend
         l.verticalAlignment = Legend.LegendVerticalAlignment.TOP
         l.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
@@ -66,34 +83,38 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
-    private fun generateCenterText(): SpannableString? {
-        val s = SpannableString("Wydatki\ndzisiejsze")
-        s.setSpan(RelativeSizeSpan(2f), 0, 8, 0)
-        s.setSpan(ForegroundColorSpan(Color.parseColor("#FF03DAC5")), 0, 8, 0)
-        s.setSpan(ForegroundColorSpan(Color.GRAY), 8, s.length, 0)
+    private fun generateCenterText(text: String, primaryStringColor: String="#FF03DAC5"): SpannableString? {
+        val s = SpannableString(text)
+        val len = text.substringBefore('\n').length
+        s.setSpan(RelativeSizeSpan(1.8f), 0, len, 0)
+        s.setSpan(ForegroundColorSpan(Color.parseColor(primaryStringColor)), 0, len, 0)
+        s.setSpan(ForegroundColorSpan(Color.GRAY), len, s.length, 0)
         return s
     }
 
     private fun getEntries(): PieData {
         val bubbleEntries = ArrayList<PieEntry>()
-        bubbleEntries.add(PieEntry(20F))
-        bubbleEntries.add(PieEntry(50F))
-        bubbleEntries.add(PieEntry(30F))
-        bubbleEntries.add(PieEntry(35.5F))
-        bubbleEntries.add(PieEntry(60F))
+        bubbleEntries.add(PieEntry(650.15F, "grocery"))
+        bubbleEntries.add(PieEntry(500F, "hobbies"))
+        bubbleEntries.add(PieEntry(320.43F, "taxes"))
+        bubbleEntries.add(PieEntry(201.20F, "investmets"))
+        bubbleEntries.add(PieEntry(150F, "other"))
         val ds1 = PieDataSet(bubbleEntries, "Spożywcze")
-        ds1.valueTextSize = 20f
+        chart.setEntryLabelTextSize(0f);
+        ds1.valueTextSize = 25f
+        ds1.valueTextColor = Color.WHITE
+
         ds1.colors = getColors()
         return PieData(ds1)
     }
 
     private fun getColors(): ArrayList<Int> {
         val colors = ArrayList<Int>()
-        colors.add(Color.GREEN)
-        colors.add(Color.BLUE)
-        colors.add(Color.RED)
-        colors.add(Color.MAGENTA)
-        colors.add(Color.YELLOW)
+        colors.add(getColorForName(context!!, "grocery"))
+        colors.add(getColorForName(context!!, "hobbies"))
+        colors.add(getColorForName(context!!, "taxes"))
+        colors.add(getColorForName(context!!, "other"))
+        colors.add(getColorForName(context!!, "investments"))
         return colors
     }
 

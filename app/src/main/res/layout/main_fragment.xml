@@ -24,11 +24,22 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pozostałe środki na miesiąc styczeń"
+        android:text="Do wydania w miesiącu: KWIECIEŃ"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message" />
+
+    <TextView
+        android:id="@+id/pieType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35sp"
+        android:text=""
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/chart"
@@ -41,7 +52,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="-109dp" />
+        tools:layout_editor_absoluteY="-109dp" >
+
+    </com.github.mikephil.charting.charts.PieChart>
 
     <LinearLayout
         android:layout_width="wrap_content"
