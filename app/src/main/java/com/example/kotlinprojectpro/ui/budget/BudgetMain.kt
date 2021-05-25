@@ -1,5 +1,6 @@
 package com.example.kotlinprojectpro.ui.budget
 
+import CategoryRecyclerAdapter
 import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
@@ -10,13 +11,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinprojectpro.R
 import com.example.kotlinprojectpro.getColorForName
+import com.example.kotlinprojectpro.models.Category
+import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.fragment_budget_main.*
+import kotlinx.android.synthetic.main.fragment_home_horizontal.*
 
 class BudgetMain : Fragment() {
 
@@ -26,7 +31,7 @@ class BudgetMain : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_budget_main, container, false)
     }
-
+    private var list = ArrayList<Category>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         percentageBudget.description.isEnabled = false
@@ -40,6 +45,14 @@ class BudgetMain : Fragment() {
         percentageBudget.data = getEntries()
         percentageBudget.data.setValueTextColor(0)
         percentageBudget.legend.isEnabled = false
+        list.add(Category(1000, "Food"))
+        list.add(Category(1200, "Hobbies"))
+        list.add(Category(1500, "Food"))
+        budgetCategoriesRecycler.layoutManager = LinearLayoutManager(context)
+        budgetCategoriesRecycler.adapter = CategoryRecyclerAdapter(list) {
+            null
+        }
+        (budgetCategoriesRecycler.adapter as CategoryRecyclerAdapter).notifyDataSetChanged()
     }
 
     private fun generateCenterText(text: String, primaryStringColor: String="#FFFFFFFF"): SpannableString? {
