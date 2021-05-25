@@ -1,5 +1,6 @@
 package com.example.kotlinprojectpro
 
+import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import com.example.kotlinprojectpro.ui.main.HorizontalFragment
 import com.example.kotlinprojectpro.ui.main.MainFragment
+import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.popup_create.*
 
