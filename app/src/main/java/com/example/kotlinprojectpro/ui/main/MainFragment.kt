@@ -1,5 +1,6 @@
 package com.example.kotlinprojectpro.ui.main
 
+import android.app.DatePickerDialog
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -17,8 +18,11 @@ import com.example.kotlinprojectpro.ui.home.HomePageFragment
 import com.example.kotlinprojectpro.ui.budget.BudgetMain
 import com.example.kotlinprojectpro.ui.charts.ChartsPage
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.popup_create.*
+import java.util.*
 
 
 class MainFragment : Fragment() {
@@ -35,6 +39,7 @@ class MainFragment : Fragment() {
             )
             bottomNavigationView.menu[2].isEnabled = false
         }
+
         addItemBtn.setOnClickListener {
             val contentView = LayoutInflater.from(context).inflate(R.layout.popup_create, null, false);
             val popupWindow = PopupWindow(
@@ -54,7 +59,25 @@ class MainFragment : Fragment() {
             val test = contentView.findViewById<AutoCompleteTextView>(R.id.textfield)
             test.setAdapter(adapter)
             test.setText(items[0],false)
+            val c: Calendar = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+            var date = ""
+            val editDate = contentView.findViewById<TextInputEditText>(R.id.editDate)
+            fun addDate() {
+                val dpd = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    val monthDate = monthOfYear + 1
+                    date = "$dayOfMonth.$monthDate.$year"
+                    editDate.setText(date)
+                }, year, month, day)
+                dpd.show()
+            }
 
+            editDate.isFocusable = false
+            editDate.setOnClickListener {
+                addDate()
+            }
         }
     }
 
