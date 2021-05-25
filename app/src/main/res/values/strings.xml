@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">KotlinProjectPRO</string>
+    <string name="textfield_label">Spent</string>
+    <string name="section1">Home</string>
+    <string name="section2">Budget</string>
+    <string name="section3">Overview</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="section4">Settings</string>
+    <string name="category">Category</string>
+    <string name="prefix">$</string>
+    <string name="titleText">Title</string>
 </resources>

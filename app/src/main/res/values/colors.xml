@@ -7,11 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
+    <color name="primary">#FFFFC107</color>
+    <color name="transparent">#FFFFFFFF</color>
+    <color name="grey">#444444</color>
+    <color name="secondary">#ef476f</color>
     <color name="grocery">#99bbad</color>
     <color name="taxes">#ebd8b7</color>
     <color name="hobbies">#c6a9a3</color>
     <color name="investments">#9a8194</color>
     <color name="other">#a0937d</color>
-
+    <color name="primaryTest">#ffffc107</color>
 </resources>
