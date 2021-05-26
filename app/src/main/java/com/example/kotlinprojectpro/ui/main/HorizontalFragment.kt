@@ -13,8 +13,13 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.get
 import com.example.kotlinprojectpro.R
+import com.example.kotlinprojectpro.ui.budget.BudgetHorizontal
+import com.example.kotlinprojectpro.ui.budget.BudgetMain
+import com.example.kotlinprojectpro.ui.charts.ChartsPage
 import com.example.kotlinprojectpro.ui.home.HomeHorizontal
 import com.example.kotlinprojectpro.ui.home.HomePageFragment
+import com.example.kotlinprojectpro.ui.settings.SettingsHorizontal
+import com.example.kotlinprojectpro.ui.settings.SettingsPage
 import kotlinx.android.synthetic.main.fragment_horizontal.*
 import kotlinx.android.synthetic.main.main_fragment.*
 
@@ -38,9 +43,19 @@ class HorizontalFragment : Fragment() {
                             ?.replace(R.id.horizontalPages, HomeHorizontal())?.commit()
                         return@setOnItemSelectedListener true
                     }
+                    R.id.page_2_horizontal -> {
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.horizontalPages, BudgetHorizontal())?.commit()
+                        return@setOnItemSelectedListener true
+                    }
+                    R.id.page_3_horizontal -> {
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.horizontalPages, ChartsPage())?.commit()
+                        return@setOnItemSelectedListener true
+                    }
                     else -> {
                         activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.horizontalPages, HomeHorizontal())?.commit()
+                            ?.replace(R.id.horizontalPages, SettingsHorizontal())?.commit()
                         return@setOnItemSelectedListener true
                     }
                 }

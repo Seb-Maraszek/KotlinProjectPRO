@@ -1,7 +1,6 @@
 package com.example.kotlinprojectpro.ui.budget
 
 import CategoryRecyclerAdapter
-import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
@@ -15,21 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinprojectpro.R
 import com.example.kotlinprojectpro.getColorForName
 import com.example.kotlinprojectpro.models.Category
-import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.fragment_budget_main.*
-import kotlinx.android.synthetic.main.fragment_home_horizontal.*
 
-class BudgetMain : Fragment() {
-
+class BudgetHorizontal : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_budget_main, container, false)
+        return inflater.inflate(R.layout.fragment_budget_horizontal, container, false)
     }
     private var list = ArrayList<Category>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,7 +78,5 @@ class BudgetMain : Fragment() {
         colors.add(getColorForName(context!!, "primary"))
         return colors
     }
-
-
 
 }

@@ -32,41 +32,10 @@ class HomePageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_home_page, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /*chart.description.isEnabled = false
-        chart.centerText = generateCenterText("1771")
-        chart.setCenterTextSize(16f)
-        chart.holeRadius = 50f
-        bottomNavigationView.menu.getItem(2).isEnabled = false
-        chart.setHoleColor(0)
-        chart.legend.isEnabled = false
-        chart.animateY(2000);
-        chart.transparentCircleRadius = 50f
-        chart.setEntryLabelTextSize(20f)
-
-        chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
-            override fun onValueSelected(e: Entry?, h: Highlight?) {
-                val pe = e as PieEntry
-                chart.centerText = generateCenterText(pe.label+"\nKWIECIEŃ")
-            }
-
-            override fun onNothingSelected() {
-                chart.centerText = generateCenterText("1771\nWYDANE")
-            }
-        })
-
-        val l = chart.legend
-        l.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        l.orientation = Legend.LegendOrientation.VERTICAL
-        l.setDrawInside(false)
-        dialog = context?.let { Dialog(it) }!!
-        chart.data = getEntries()*/
-
         addMock()
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = RecyclerViewAdapter(list, dateList) {
@@ -80,8 +49,6 @@ class HomePageFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
     }
-
-
 
     private fun addMock(){
         list.add("$123,541.00")
