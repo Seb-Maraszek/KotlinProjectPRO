@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinprojectpro.R
 import com.example.kotlinprojectpro.models.Expense
-import kotlinx.android.synthetic.main.main_fragment.*
 
 class RecyclerViewAdapter(
     private val list: ArrayList<Any>,
@@ -38,8 +37,7 @@ class RecyclerViewAdapter(
     override fun getItemCount() = list.size
 
     override fun getItemViewType(position: Int): Int {
-        val comparable = list[position]
-        return when (comparable) {
+        return when (list[position]) {
             is String -> TYPE_HEADER
             is Expense -> TYPE_ITEM
             else -> throw IllegalArgumentException("Invalid type of data $position")

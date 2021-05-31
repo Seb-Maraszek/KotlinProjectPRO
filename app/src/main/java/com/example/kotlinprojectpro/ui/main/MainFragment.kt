@@ -17,6 +17,7 @@ import com.example.kotlinprojectpro.models.Expense
 import com.example.kotlinprojectpro.ui.home.HomePageFragment
 import com.example.kotlinprojectpro.ui.budget.BudgetMain
 import com.example.kotlinprojectpro.ui.charts.ChartsPage
+import com.example.kotlinprojectpro.ui.settings.SettingsPage
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_set_up_account_spendings.*
@@ -140,7 +141,7 @@ class MainFragment : Fragment() {
             }
             R.id.page_4 -> {
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.fragmentsContainer, BudgetMain())?.commit()
+                    ?.replace(R.id.fragmentsContainer, SettingsPage())?.commit()
                 return@OnNavigationItemSelectedListener true
             }
         }
