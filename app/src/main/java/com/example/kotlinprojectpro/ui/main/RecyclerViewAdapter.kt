@@ -31,6 +31,9 @@ class RecyclerViewAdapter(
         val saving: TextView = itemView.findViewById<View>(R.id.savings) as TextView
     }
 
+    fun addExpense(expense: Expense){
+        list.add(expense)
+    }
     override fun getItemCount() = list.size
 
     override fun getItemViewType(position: Int): Int {

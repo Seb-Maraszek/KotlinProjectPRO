@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SetUpAccountSpendings">
+
+    <EditText
+        android:id="@+id/defaultTime"
+        android:layout_width="100dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:width="60dp"
+        android:height="50dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/initialMoney"
+        android:layout_width="100dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
+        android:width="60dp"
+        android:height="50dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/defaultTime" />
+
+    <EditText
+        android:id="@+id/currencyInput"
+        android:layout_width="100dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="20dp"
+        android:width="60dp"
+        android:height="50dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/initialMoney" />
+
+    <EditText
+        android:id="@+id/predictedIncome"
+        android:layout_width="100dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="20dp"
+        android:width="60dp"
+        android:height="50dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currencyInput" />
+
+    <EditText
+        android:id="@+id/predictedOutcome"
+        android:layout_width="100dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="20dp"
+        android:width="60dp"
+        android:height="50dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/predictedIncome" />
+
+    <Button
+        android:id="@+id/submitAccount"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:width="60dp"
+        android:height="50dp"
+        android:onClick="registerUser"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="301dp"
+        tools:ignore="MissingConstraints" />
+</androidx.constraintlayout.widget.ConstraintLayout>

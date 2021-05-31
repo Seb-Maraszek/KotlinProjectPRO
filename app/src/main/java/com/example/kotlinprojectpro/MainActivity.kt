@@ -1,22 +1,17 @@
 package com.example.kotlinprojectpro
 
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.text.Editable
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.PopupWindow
+import androidx.appcompat.app.AppCompatActivity
+import com.example.kotlinprojectpro.models.Expense
 import com.example.kotlinprojectpro.ui.main.HorizontalFragment
 import com.example.kotlinprojectpro.ui.main.MainFragment
-import kotlinx.android.synthetic.main.main_fragment.*
-import kotlinx.android.synthetic.main.popup_create.*
+
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        var globalExpenseList: ArrayList<Any>? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +20,6 @@ class MainActivity : AppCompatActivity() {
             changeFragment()
         }
     }
-
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         changeFragment()

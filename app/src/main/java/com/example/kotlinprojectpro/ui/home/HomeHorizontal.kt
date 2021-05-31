@@ -5,15 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinprojectpro.R
 import com.example.kotlinprojectpro.models.Expense
-import com.example.kotlinprojectpro.ui.main.MainViewModel
 import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.fragment_home_horizontal.*
-import kotlinx.android.synthetic.main.fragment_home_page.*
-import kotlinx.android.synthetic.main.fragment_home_page.recyclerView
 
 class HomeHorizontal : Fragment() {
     var list = ArrayList<Any>()

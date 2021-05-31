@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinprojectpro.R
+import com.example.kotlinprojectpro.getAllExpensesValue
 import com.example.kotlinprojectpro.getColorForName
 import com.example.kotlinprojectpro.models.Category
 import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
@@ -35,6 +36,8 @@ class BudgetMain : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         percentageBudget.description.isEnabled = false
+        expense.text = "$"+getAllExpensesValue().toString()
+
         percentageBudget.centerText = generateCenterText("$3,400\nOut of 6,188")
         percentageBudget.setCenterTextSize(16f)
         percentageBudget.holeRadius = 70f
