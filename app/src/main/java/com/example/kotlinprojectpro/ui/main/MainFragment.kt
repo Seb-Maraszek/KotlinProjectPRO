@@ -4,22 +4,24 @@ import android.app.DatePickerDialog
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.LinearLayout
-import android.widget.PopupWindow
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import com.example.kotlinprojectpro.FirebaseCommunicator
+import com.example.kotlinprojectpro.MainActivity.Companion.globalExpenseList
 import com.example.kotlinprojectpro.R
+import com.example.kotlinprojectpro.getAllExpensesValue
+import com.example.kotlinprojectpro.models.Expense
 import com.example.kotlinprojectpro.ui.home.HomePageFragment
 import com.example.kotlinprojectpro.ui.budget.BudgetMain
 import com.example.kotlinprojectpro.ui.charts.ChartsPage
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.activity_set_up_account_spendings.*
+import kotlinx.android.synthetic.main.fragment_budget_main.*
+import kotlinx.android.synthetic.main.fragment_home_page.*
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.popup_create.*
 import java.util.*
@@ -73,14 +75,31 @@ class MainFragment : Fragment() {
                 }, year, month, day)
                 dpd.show()
             }
+            fun addExpense(){
+                //TODO DODAĆ TO BO JA NIE OGARNIAM TEJ NOTACJI
+                var valueOfExpense = 2000
+                val newExpense = Expense("Food",
+                    "Burger",
+                    "image",
+                    date,
+                    valueOfExpense.toString()
+                )
+                expense.text = "$"+getAllExpensesValue(valueOfExpense).toString()
+                FirebaseCommunicator.addNewExpenseToDb(newExpense)
+                globalExpenseList?.add(newExpense)
+            }
 
+
+            val submitButton = contentView.findViewById<Button>(R.id.button)
+            submitButton.setOnClickListener{
+                addExpense()
+            }
             editDate.isFocusable = false
             editDate.setOnClickListener {
                 addDate()
             }
         }
     }
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         val transaction = fragmentManager?.beginTransaction()
