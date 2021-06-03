@@ -11,12 +11,17 @@ import com.example.kotlinprojectpro.R
 import com.example.kotlinprojectpro.models.Expense
 
 class RecyclerViewAdapter(
-    private val list: ArrayList<Any>,
+    private var list: ArrayList<Any>,
     val listener: (Expense) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TYPE_HEADER = 1
     private val TYPE_ITEM = 0
+
+    fun updateAdapter(list: ArrayList<Any>) {
+        this.list = list
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById<View>(R.id.titleExpense) as TextView
@@ -62,7 +67,7 @@ class RecyclerViewAdapter(
         } else if(holder is ViewHolder){
             val item = list[position]
             if(item is Expense) {
-                if(position > 2) {
+                if(position > 1) {
                     val prevItem = list[position - 1] as Expense
                     if(item.date == prevItem.date) {
                         holder.expenseDate.visibility = View.GONE

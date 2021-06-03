@@ -11,6 +11,7 @@ import com.example.kotlinprojectpro.ui.main.MainFragment
 class MainActivity : AppCompatActivity() {
     companion object {
         var globalExpenseList: ArrayList<Any> = ArrayList()
+        var globalIncomeList: ArrayList<Any> = ArrayList()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

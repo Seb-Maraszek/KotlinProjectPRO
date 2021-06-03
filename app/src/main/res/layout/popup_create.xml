@@ -62,7 +62,7 @@
             <LinearLayout
                 android:id="@+id/dateAndExpense"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@id/button"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -84,9 +84,9 @@
                     app:prefixText="@string/prefix">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/valueExpenseText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/valueExpenseText"
                         android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 

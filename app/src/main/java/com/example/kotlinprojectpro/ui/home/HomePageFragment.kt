@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_home_page.*
+import java.util.ArrayList
 
 
 class HomePageFragment : Fragment() {
@@ -28,6 +29,7 @@ class HomePageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        updateGlobalExpensesList()
 
         return inflater.inflate(R.layout.fragment_home_page, container, false)
     }
@@ -40,9 +42,4 @@ class HomePageFragment : Fragment() {
         (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
         super.onViewCreated(view, savedInstanceState)
     }
-
-    private fun addThings(){
-        Log.i("Things from DB", globalExpenseList.toString())
-    }
-
 }

@@ -3,7 +3,9 @@ package com.example.kotlinprojectpro
 
 import android.util.Log
 import com.example.kotlinprojectpro.MainActivity.Companion.globalExpenseList
+import com.example.kotlinprojectpro.MainActivity.Companion.globalIncomeList
 import com.example.kotlinprojectpro.models.Expense
+import com.example.kotlinprojectpro.models.Income
 import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -71,12 +73,12 @@ object FirebaseCommunicator {
                             globalExpenseList = expense_list
                             for (ds in dataSnapshot.children) {
                                 val expense: Expense? =
-                                    ds.getValue(com.example.kotlinprojectpro.models.Expense::class.java)
+                                    ds.getValue(Expense::class.java)
                                 if (expense != null) {
                                     globalExpenseList.add(expense)
                                 }
                             }
-                            globalExpenseList.sortBy { (it as Expense).date }
+                            globalExpenseList.sortByDescending { (it as Expense).date }
                             globalExpenseList
                             val expenses = getAllExpensesValue().toString()
                             globalExpenseList.remove(0)
@@ -88,6 +90,46 @@ object FirebaseCommunicator {
                         TODO("Not yet implemented")
                     }
                 })
+        }
+    }
+
+    fun updateGlobalIncomeList() {
+        getCurrentlyLoggedUserUid()?.let {
+            FirebaseDatabase.getInstance()
+                .reference.child("incomes").child(it).addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            val expense_list = ArrayList<Any>()
+                            globalIncomeList = expense_list
+                            for (ds in dataSnapshot.children) {
+                                val expense: Income? =
+                                    ds.getValue(Income::class.java)
+                                if (expense != null) {
+                                    globalIncomeList.add(expense)
+                                }
+                            }
+                            globalIncomeList.sortByDescending { (it as Income).date }
+                            globalIncomeList
+                            val expenses = getAllExpensesValue().toString()
+                            globalIncomeList.remove(0)
+                            globalIncomeList.add(0, expenses)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })
+        }
+    }
+
+
+    fun addNewIncomeToDb(newIncome: Income){
+        getCurrentlyLoggedUserUid()?.let {
+            mDatabase!!.child("incomes").child(it).push().setValue(
+                newIncome
+            )
         }
     }
 }

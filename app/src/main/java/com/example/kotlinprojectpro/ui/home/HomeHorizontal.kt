@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kotlinprojectpro.FirebaseCommunicator.updateGlobalExpensesList
 import com.example.kotlinprojectpro.MainActivity.Companion.globalExpenseList
 import com.example.kotlinprojectpro.R
 import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
@@ -17,7 +18,10 @@ class HomeHorizontal : Fragment() {
         recyclerViewHorizontal.adapter = RecyclerViewAdapter(globalExpenseList) {
             null
         }
+
         (recyclerViewHorizontal.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+        (recyclerViewHorizontal.adapter as RecyclerViewAdapter).updateAdapter(globalExpenseList)
+
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -25,6 +29,7 @@ class HomeHorizontal : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        updateGlobalExpensesList()
         return inflater.inflate(R.layout.fragment_home_horizontal, container, false)
     }
 }

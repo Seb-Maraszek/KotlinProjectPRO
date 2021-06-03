@@ -1,6 +1,5 @@
 package com.example.kotlinprojectpro.ui.main
 
-import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.res.Configuration
@@ -11,8 +10,10 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.example.kotlinprojectpro.FirebaseCommunicator
 import com.example.kotlinprojectpro.FirebaseCommunicator.updateGlobalExpensesList
+import com.example.kotlinprojectpro.FirebaseCommunicator.updateGlobalIncomeList
 import com.example.kotlinprojectpro.MainActivity.Companion.globalExpenseList
 import com.example.kotlinprojectpro.R
 import com.example.kotlinprojectpro.getAllExpensesValue
@@ -39,19 +40,6 @@ import java.util.*
 
 
 class MainFragment : Fragment() {
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(recyclerView != null){
-            (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
-        }
-        if(recyclerViewHorizontal != null) {
-            (recyclerViewHorizontal.adapter as RecyclerViewAdapter).notifyDataSetChanged()
-        }
-    }
-
-
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,8 +50,54 @@ class MainFragment : Fragment() {
             bottomNavigationView.menu[2].isEnabled = false
 
         }
+        if(recyclerView != null) {
+            recyclerView.adapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    super.onItemRangeInserted(positionStart, itemCount)
+                    recyclerView.adapter = RecyclerViewAdapter(globalExpenseList) {
+                        null
+                    }
+                    (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+                }
+            })
+        }
 
+        updateGlobalIncomeList()
+        FirebaseCommunicator.getCurrentlyLoggedUserUid()?.let { it ->
+            FirebaseDatabase.getInstance()
+                .reference.child("expenses").child(it).addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            val expense_list = ArrayList<Any>()
+                            globalExpenseList = expense_list
+                            for (ds in dataSnapshot.children) {
+                                val expense: Expense? =
+                                    ds.getValue(com.example.kotlinprojectpro.models.Expense::class.java)
+                                if (expense != null) {
+                                    globalExpenseList.add(expense)
+                                }
+                            }
+                            globalExpenseList.sortByDescending { (it as Expense).date }
+                            val expenses = getAllExpensesValue().toString()
+                            globalExpenseList.remove(0)
+                            globalExpenseList.add(0, expenses)
+                            if(recyclerView != null){
+                                (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+                                (recyclerView.adapter as RecyclerViewAdapter).updateAdapter(globalExpenseList)
+                            }
+                            if(recyclerViewHorizontal != null) {
+                                (recyclerViewHorizontal.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+                                (recyclerViewHorizontal.adapter as RecyclerViewAdapter).updateAdapter(globalExpenseList)
+                            }
+                        }
+                    }
 
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })
+        }
 
         addItemBtn.setOnClickListener {
             val contentView = LayoutInflater.from(context).inflate(
@@ -147,7 +181,14 @@ class MainFragment : Fragment() {
                 )
                 FirebaseCommunicator.addNewExpenseToDb(newExpense)
                 globalExpenseList.add(newExpense)
-                (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+                if(recyclerView != null){
+                    (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+                    (recyclerView.adapter as RecyclerViewAdapter).updateAdapter(globalExpenseList)
+                }
+                if(recyclerViewHorizontal != null) {
+                    (recyclerViewHorizontal.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+                    (recyclerViewHorizontal.adapter as RecyclerViewAdapter).updateAdapter(globalExpenseList)
+                }
             }
 
 
@@ -160,8 +201,9 @@ class MainFragment : Fragment() {
                 addDate()
             }
         }
-
     }
+
+
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -176,6 +218,7 @@ class MainFragment : Fragment() {
 
         if(savedInstanceState == null) {
             updateGlobalExpensesList()
+            updateGlobalIncomeList()
             val transaction = activity?.supportFragmentManager?.beginTransaction()
             val verticalFragment = HomePageFragment()
             transaction?.replace(R.id.fragmentsContainer, verticalFragment)
