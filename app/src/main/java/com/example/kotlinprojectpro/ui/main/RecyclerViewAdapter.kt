@@ -63,24 +63,15 @@ class RecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is HeaderViewHolder){
-            holder.saving.text = list[position] as String
+            holder.saving.text = list[position] as String + " $"
         } else if(holder is ViewHolder){
             val item = list[position]
             if(item is Expense) {
-                if(position > 1) {
-                    val prevItem = list[position - 1] as Expense
-                    if(item.date == prevItem.date) {
-                        holder.expenseDate.visibility = View.GONE
-                    } else {
-                        holder.expenseDate.text = item.date
-                    }
-                } else {
-                    holder.expenseDate.text = item.date
-                }
+                holder.expenseDate.visibility = View.GONE
                 holder.expenseIcon.setImageURI(Uri.parse(item.image))
                 holder.title.text = item.title
                 holder.category.text = item.category
-                holder.value.text = item.value
+                holder.value.text = item.value + "$"
             }
         }
     }

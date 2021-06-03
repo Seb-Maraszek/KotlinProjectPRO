@@ -13,10 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.PopupWindow
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinprojectpro.*
 import com.example.kotlinprojectpro.FirebaseCommunicator.addNewIncomeToDb
@@ -104,13 +101,33 @@ class BudgetMain : Fragment() {
             val editDate = contentView.findViewById<TextInputEditText>(R.id.editDate)
             fun addIncome(){
                 val income = contentView.findViewById<TextInputEditText>(R.id.valueIncomeText)
-                val newIncome = Income(
-                    date,
-                    income.text.toString()
-                )
-                addNewIncomeToDb(newIncome)
-                globalIncomeList.add(newIncome)
-                incomeText.text = getAllIncomesValue().toString()
+                if(income.text.toString() != "") {
+
+                    val newIncome = Income(
+                        date,
+                        income.text.toString()
+                    )
+                    addNewIncomeToDb(newIncome)
+                    globalIncomeList.add(newIncome)
+                    incomeText.text = getAllIncomesValue().toString()
+
+                    if(getAllIncomesValue() != 0) {
+                        expense.text = "$"+getAllExpensesValue().toString()
+                        incomeText.text = "$"+getAllIncomesValue().toString()
+                        percentageBudget.centerText = generateCenterText("$" +getAllExpensesValue().toString() + "\nOut of " + "$" + getAllIncomesValue().toString())
+                        percentageBudget.setCenterTextSize(16f)
+                        percentageBudget.data = getEntries()
+                        percentageBudget.data.setValueTextColor(0)
+                        percentageBudget.invalidate()
+
+                    }
+                    popupWindow.dismiss()
+                } else {
+                    Toast.makeText(
+                        context, "Failed to add expense",
+                        Toast.LENGTH_SHORT
+                    )
+                }
             }
             fun addDate() {
                 val dpd = DatePickerDialog(
@@ -149,7 +166,6 @@ class BudgetMain : Fragment() {
     private fun getEntries(): PieData {
         val entries = ArrayList<PieEntry>()
         val percentage = getAllExpensesValue().toFloat() / getAllIncomesValue().toFloat() * 100
-        println( percentage)
         entries.add(PieEntry(percentage))
         entries.add(PieEntry(100F - percentage))
         val dataSet = PieDataSet(entries, "Spent budget")

@@ -6,202 +6,211 @@
     android:layout_height="match_parent"
     tools:context=".ui.budget.BudgetMain">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center|center_horizontal|center_vertical"
-            android:text="Your budget"
-            android:textColor="@color/primary"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/percentageBudget"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1">
-
-        </com.github.mikephil.charting.charts.PieChart>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/budgetCategoriesRecycler"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:clipToPadding="false" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="24dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLay">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardFirst"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_weight="1"
-            android:paddingLeft="5dp"
-            android:paddingTop="20dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="20dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp">
+            android:orientation="vertical" >
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/gradient_blue"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:paddingTop="20dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="20dp">
-
-                <ImageView
-                    android:id="@+id/firstImage"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/salary" />
+                android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/linearLayout2"
                     android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLay">
 
-                    <TextView
-                        android:id="@+id/Income"
-                        android:layout_width="match_parent"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardFirst"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Income"
-                        android:textColor="#070707"
-                        android:textStyle="bold" />
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="20dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="10dp">
 
-                    <TextView
-                        android:id="@+id/incomeText"
-                        android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/gradient_blue"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="20dp"
+                            android:paddingRight="5dp"
+                            android:paddingBottom="20dp">
+
+                            <ImageView
+                                android:id="@+id/firstImage"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/salary" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="54dp"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/Income"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Income"
+                                    android:textColor="#070707"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/incomeTextHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="$1234"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="24sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardSecond"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-condensed"
-                        android:text="$1234"
-                        android:textColor="#FFFFFF"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="20dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/gradient_blue"
+                            android:orientation="horizontal"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="20dp"
+                            android:paddingRight="5dp"
+                            android:paddingBottom="20dp">
+
+                            <ImageView
+                                android:id="@+id/image2"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/flyingmoney" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="54dp"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginLeft="20dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/Expense"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Expense"
+                                    android:textColor="#070707"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/expenseHorizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="$1656"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="24sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
                 </LinearLayout>
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardSecond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_weight="1"
-            android:paddingLeft="5dp"
-            android:paddingTop="20dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="20dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/gradient_blue"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:paddingTop="20dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="20dp">
-
-                <ImageView
-                    android:id="@+id/image2"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/flyingmoney" />
 
                 <LinearLayout
+                    android:id="@+id/linearLay"
                     android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/percentageBudgetHorizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1">
+
+                    </com.github.mikephil.charting.charts.PieChart>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/budgetCategoriesRecycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clipToPadding="false" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/Expense"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Expense"
-                        android:textColor="#070707"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/expense"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_marginTop="8dp"
                         android:fontFamily="sans-serif-condensed"
-                        android:text="$1656"
-                        android:textColor="#FFFFFF"
+                        android:gravity="center|center_horizontal|center_vertical"
+                        android:text="Your budget"
+                        android:textColor="@color/primary"
                         android:textSize="24sp"
                         android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,19 +15,21 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinprojectpro.*
+import com.example.kotlinprojectpro.FirebaseCommunicator.updateGlobalExpensesList
+import com.example.kotlinprojectpro.FirebaseCommunicator.updateGlobalIncomeList
 import com.example.kotlinprojectpro.models.Category
 import com.example.kotlinprojectpro.models.Income
-import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.fragment_budget_main.*
-import kotlinx.android.synthetic.main.fragment_home_horizontal.*
-import kotlinx.android.synthetic.main.fragment_home_page.*
+import kotlinx.android.synthetic.main.fragment_budget_horizontal.*
+import kotlinx.android.synthetic.main.fragment_budget_main.budgetCategoriesRecycler
+import kotlinx.android.synthetic.main.fragment_budget_main.cardFirst
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -36,28 +38,28 @@ class BudgetHorizontal : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        FirebaseCommunicator.updateGlobalIncomeList()
-        FirebaseCommunicator.updateGlobalExpensesList()
+        updateGlobalIncomeList()
+        updateGlobalExpensesList()
         return inflater.inflate(R.layout.fragment_budget_horizontal, container, false)
     }
     private var list = ArrayList<Category>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        expense.text = "$"+ getAllExpensesValue().toString()
-        incomeText.text = "$"+ getAllIncomesValue().toString()
-        percentageBudget.description.isEnabled = false
-        percentageBudget.centerText = generateCenterText("$3,400\nOut of 6,188")
-        percentageBudget.setCenterTextSize(16f)
-        percentageBudget.holeRadius = 70f
-        percentageBudget.setHoleColor(0)
-        percentageBudget.setEntryLabelTextSize(0f)
-        percentageBudget.animateY(1500, Easing.EasingOption.EaseOutBounce);
-        percentageBudget.transparentCircleRadius = 70f
+        expenseHorizontal.text = "$"+ getAllExpensesValue().toString()
+        incomeTextHorizontal.text = "$"+ getAllIncomesValue().toString()
+        percentageBudgetHorizontal.description.isEnabled = false
+        percentageBudgetHorizontal.centerText = generateCenterText("$" +getAllExpensesValue().toString() + "\nOut of " + "$" + getAllIncomesValue().toString())
+        percentageBudgetHorizontal.setCenterTextSize(16f)
+        percentageBudgetHorizontal.holeRadius = 70f
+        percentageBudgetHorizontal.setHoleColor(0)
+        percentageBudgetHorizontal.setEntryLabelTextSize(0f)
+        percentageBudgetHorizontal.animateY(1500, Easing.EasingOption.EaseOutBounce);
+        percentageBudgetHorizontal.transparentCircleRadius = 70f
         if(getAllIncomesValue() != 0) {
-            percentageBudget.data = getEntries()
-            percentageBudget.data.setValueTextColor(0)
+            percentageBudgetHorizontal.data = getEntries()
+            percentageBudgetHorizontal.data.setValueTextColor(0)
         }
-        percentageBudget.legend.isEnabled = false
+        percentageBudgetHorizontal.legend.isEnabled = false
         list.add(Category(1000, "Food"))
         list.add(Category(1200, "Hobbies"))
         list.add(Category(1500, "Food"))
@@ -94,20 +96,29 @@ class BudgetHorizontal : Fragment() {
             var date = ""
             val editDate = contentView.findViewById<TextInputEditText>(R.id.editDate)
             fun addIncome(){
-                val incomeText = contentView.findViewById<TextInputEditText>(R.id.valueIncomeText)
-                val newIncome = Income(
-                    date,
-                    incomeText.text.toString()
-                )
-
-                if(recyclerView != null){
-                    (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
-                    (recyclerView.adapter as RecyclerViewAdapter).updateAdapter(MainActivity.globalExpenseList)
-                }
-                if(recyclerViewHorizontal != null) {
-                    (recyclerViewHorizontal.adapter as RecyclerViewAdapter).notifyDataSetChanged()
-                    (recyclerViewHorizontal.adapter as RecyclerViewAdapter).updateAdapter(
-                        MainActivity.globalExpenseList
+                val income = contentView.findViewById<TextInputEditText>(R.id.valueIncomeText)
+                if(income.text.toString() != "" || editDate.text.toString() != "") {
+                    val newIncome = Income(
+                        date,
+                        income.text.toString()
+                    )
+                    FirebaseCommunicator.addNewIncomeToDb(newIncome)
+                    MainActivity.globalIncomeList.add(newIncome)
+                    incomeTextHorizontal.text = getAllIncomesValue().toString()
+                    if(getAllIncomesValue() != 0) {
+                        expenseHorizontal.text = "$"+getAllExpensesValue().toString()
+                        incomeTextHorizontal.text = "$"+getAllIncomesValue().toString()
+                        percentageBudgetHorizontal.centerText = generateCenterText("$" +getAllExpensesValue().toString() + "\nOut of " + "$" + getAllIncomesValue().toString())
+                        percentageBudgetHorizontal.setCenterTextSize(16f)
+                        percentageBudgetHorizontal.data = getEntries()
+                        percentageBudgetHorizontal.data.setValueTextColor(0)
+                        percentageBudgetHorizontal.invalidate()
+                    }
+                    popupWindow.dismiss()
+                } else {
+                    Toast.makeText(
+                        context, "Failed to add expense",
+                        Toast.LENGTH_SHORT
                     )
                 }
             }
@@ -147,8 +158,9 @@ class BudgetHorizontal : Fragment() {
 
     private fun getEntries(): PieData {
         val entries = ArrayList<PieEntry>()
-        entries.add(PieEntry(82F))
-        entries.add(PieEntry(18F))
+        val percentage = getAllExpensesValue().toFloat() / getAllIncomesValue().toFloat() * 100
+        entries.add(PieEntry(percentage))
+        entries.add(PieEntry(100F - percentage))
         val dataSet = PieDataSet(entries, "Spent budget")
         dataSet.colors = getColors()
         return PieData(dataSet)

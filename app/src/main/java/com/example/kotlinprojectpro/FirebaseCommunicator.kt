@@ -53,6 +53,7 @@ object FirebaseCommunicator {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
 
+
     fun addNewExpenseToDb(newExpense: Expense) {
         Log.i("newExpense", newExpense.toString())
         getCurrentlyLoggedUserUid()?.let {

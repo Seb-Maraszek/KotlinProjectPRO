@@ -1,27 +1,31 @@
 package com.example.kotlinprojectpro.ui.main
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import com.example.kotlinprojectpro.FirebaseCommunicator
+import com.example.kotlinprojectpro.*
 import com.example.kotlinprojectpro.FirebaseCommunicator.updateGlobalExpensesList
 import com.example.kotlinprojectpro.FirebaseCommunicator.updateGlobalIncomeList
 import com.example.kotlinprojectpro.MainActivity.Companion.globalExpenseList
-import com.example.kotlinprojectpro.R
-import com.example.kotlinprojectpro.getAllExpensesValue
 import com.example.kotlinprojectpro.models.Expense
 import com.example.kotlinprojectpro.ui.budget.BudgetMain
 import com.example.kotlinprojectpro.ui.charts.ChartsPage
 import com.example.kotlinprojectpro.ui.home.HomePageFragment
 import com.example.kotlinprojectpro.ui.settings.SettingsPage
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DataSnapshot
@@ -31,6 +35,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_set_up_account_spendings.*
 import kotlinx.android.synthetic.main.expense_item.*
 import kotlinx.android.synthetic.main.expense_item.view.*
+import kotlinx.android.synthetic.main.fragment_budget_horizontal.*
 import kotlinx.android.synthetic.main.fragment_budget_main.*
 import kotlinx.android.synthetic.main.fragment_home_horizontal.*
 import kotlinx.android.synthetic.main.fragment_home_page.*
@@ -73,7 +78,7 @@ class MainFragment : Fragment() {
                             globalExpenseList = expense_list
                             for (ds in dataSnapshot.children) {
                                 val expense: Expense? =
-                                    ds.getValue(com.example.kotlinprojectpro.models.Expense::class.java)
+                                    ds.getValue(Expense::class.java)
                                 if (expense != null) {
                                     globalExpenseList.add(expense)
                                 }
@@ -171,26 +176,43 @@ class MainFragment : Fragment() {
                 } else if(categoryTxt == "Healthcare"){
                     image = "android.resource://com.example.kotlinprojectpro/" + R.drawable.healthcare
                 }
+                if(categoryText.text.toString() != "" || titleText.text.toString() != "" || expenseText.text.toString() != "") {
+                    val newExpense = Expense(
+                        categoryText.text.toString(),
+                        titleText.text.toString(),
+                        image,
+                        date,
+                        expenseText.text.toString()
+                    )
 
-                val newExpense = Expense(
-                    categoryText.text.toString(),
-                    titleText.text.toString(),
-                    image,
-                    date,
-                    expenseText.text.toString()
-                )
-                FirebaseCommunicator.addNewExpenseToDb(newExpense)
-                globalExpenseList.add(newExpense)
-                if(recyclerView != null){
-                    (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
-                    (recyclerView.adapter as RecyclerViewAdapter).updateAdapter(globalExpenseList)
-                }
-                if(recyclerViewHorizontal != null) {
-                    (recyclerViewHorizontal.adapter as RecyclerViewAdapter).notifyDataSetChanged()
-                    (recyclerViewHorizontal.adapter as RecyclerViewAdapter).updateAdapter(globalExpenseList)
+                    FirebaseCommunicator.addNewExpenseToDb(newExpense)
+                    globalExpenseList.add(newExpense)
+
+                    if (recyclerView != null) {
+                        (recyclerView.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+                        (recyclerView.adapter as RecyclerViewAdapter).updateAdapter(
+                            globalExpenseList
+                        )
+                    }
+                    if (recyclerViewHorizontal != null) {
+                        (recyclerViewHorizontal.adapter as RecyclerViewAdapter).notifyDataSetChanged()
+                        (recyclerViewHorizontal.adapter as RecyclerViewAdapter).updateAdapter(
+                            globalExpenseList
+                        )
+                    }
+                    if(percentageBudget != null){
+                        expense.text = "$" + getAllExpensesValue().toString()
+                        incomeText.text = "$" + getAllIncomesValue().toString()
+                        updateChart()
+                    }
+
+                } else {
+                    Toast.makeText(
+                        context, "Failed to add expense",
+                        Toast.LENGTH_SHORT
+                    )
                 }
             }
-
 
             val submitButton = contentView.findViewById<Button>(R.id.button)
             submitButton.setOnClickListener{
@@ -203,7 +225,36 @@ class MainFragment : Fragment() {
         }
     }
 
-
+    private fun updateChart() {
+        fun getColors(): ArrayList<Int> {
+            val colors = ArrayList<Int>()
+            colors.add(Color.rgb(255,193,7))
+            colors.add(getColorForName(context!!, "primary"))
+            return colors
+        }
+        fun getEntries(): PieData {
+            val entries = ArrayList<PieEntry>()
+            val percentage = getAllExpensesValue().toFloat() / getAllIncomesValue().toFloat() * 100
+            entries.add(PieEntry(percentage))
+            entries.add(PieEntry(100F - percentage))
+            val dataSet = PieDataSet(entries, "Spent budget")
+            dataSet.colors = getColors()
+            return PieData(dataSet)
+        }
+        fun generateCenterText(text: String, primaryStringColor: String="#FFFFFFFF"): SpannableString? {
+            val s = SpannableString(text)
+            val len = text.substringBefore("\n").length
+            s.setSpan(RelativeSizeSpan(1.8f), 0, len, 0)
+            s.setSpan(ForegroundColorSpan(Color.parseColor(primaryStringColor)), 0, len, 0)
+            s.setSpan(ForegroundColorSpan(Color.GRAY), len, s.length, 0)
+            return s
+        }
+        percentageBudget.centerText = generateCenterText("$" +getAllExpensesValue().toString() + "\nOut of " + "$" + getAllIncomesValue().toString())
+        percentageBudget.setCenterTextSize(16F)
+        percentageBudget.data = getEntries()
+        percentageBudget.data.setValueTextColor(0)
+        percentageBudget.invalidate()
+    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
