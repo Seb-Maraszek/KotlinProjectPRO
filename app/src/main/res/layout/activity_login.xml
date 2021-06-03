@@ -97,26 +97,24 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView">
 
         <Button
-            android:id="@+id/button8"
+            android:id="@+id/loginUser"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/pill_shape"
-            android:onClick="loginUser"
             android:text="Login"
             app:backgroundTint="@color/primary" />
 
         <Button
-            android:id="@+id/button9"
+            android:id="@+id/registerUser"
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/pill_shape"
-            android:onClick="registerUser"
-            app:backgroundTint="@color/primary"
-            android:text="Register" />
+            android:text="Register"
+            app:backgroundTint="@color/primary" />
     </LinearLayout>
 
     <ImageView

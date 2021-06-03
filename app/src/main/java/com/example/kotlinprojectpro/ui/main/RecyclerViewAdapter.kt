@@ -12,7 +12,6 @@ import com.example.kotlinprojectpro.models.Expense
 
 class RecyclerViewAdapter(
     private val list: ArrayList<Any>,
-    private val dateList: ArrayList<String>,
     val listener: (Expense) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -22,7 +21,7 @@ class RecyclerViewAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById<View>(R.id.titleExpense) as TextView
         val expenseIcon:ImageView = itemView.findViewById<View>(R.id.expenseIcon) as ImageView
-        val category:TextView = itemView.findViewById<View>(R.id.category) as TextView
+        val category:TextView = itemView.findViewById<View>(R.id.categoryText) as TextView
         val expenseDate:TextView = itemView.findViewById<View>(R.id.expenseDate) as TextView
         val value:TextView = itemView.findViewById<View>(R.id.value) as TextView
     }
@@ -31,9 +30,6 @@ class RecyclerViewAdapter(
         val saving: TextView = itemView.findViewById<View>(R.id.savings) as TextView
     }
 
-    fun addExpense(expense: Expense){
-        list.add(expense)
-    }
     override fun getItemCount() = list.size
 
     override fun getItemViewType(position: Int): Int {
@@ -66,11 +62,12 @@ class RecyclerViewAdapter(
         } else if(holder is ViewHolder){
             val item = list[position]
             if(item is Expense) {
-                if(position > 1) {
-                    if(dateList[position - 1] != item.date){
-                        holder.expenseDate.text = item.date
-                    } else {
+                if(position > 2) {
+                    val prevItem = list[position - 1] as Expense
+                    if(item.date == prevItem.date) {
                         holder.expenseDate.visibility = View.GONE
+                    } else {
+                        holder.expenseDate.text = item.date
                     }
                 } else {
                     holder.expenseDate.text = item.date

@@ -6,4 +6,4 @@ data class UserData(
     var billingPeriodDays: Int? = 10,
     var totalPredictedIncome:Float? = 100f,
     var totalPredictedOutcome:Float? = 100f,
-    )
+)

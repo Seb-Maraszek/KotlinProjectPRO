@@ -2,16 +2,16 @@ package com.example.kotlinprojectpro
 
 
 import android.util.Log
-
 import com.example.kotlinprojectpro.MainActivity.Companion.globalExpenseList
 import com.example.kotlinprojectpro.models.Expense
+import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_budget_main.*
-
+import com.google.firebase.firestore.auth.User
+import kotlinx.android.synthetic.main.fragment_home_horizontal.*
+import kotlinx.android.synthetic.main.fragment_home_page.*
+import java.util.ArrayList
 
 object FirebaseCommunicator {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -23,53 +23,71 @@ object FirebaseCommunicator {
 
     }
 
-    fun registerWithEmailAndPassword(email: String, password: String, activity: Login){
-        try{
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(activity, OnCompleteListener {task->
-                Toaster().registerToast(task.isSuccessful, activity)
-            })}
-        catch (e: Exception){
+    fun registerWithEmailAndPassword(email: String, password: String, activity: Login) {
+        try {
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
+                activity,
+                OnCompleteListener { task ->
+                    Toaster().registerToast(task.isSuccessful, activity)
+                })
+        } catch (e: Exception) {
             Toaster().registerToast(false, activity)
-    }
+        }
     }
 
-    fun loginWithEmailAndPassword(email:String, password:String, activity:Login){
-        try{
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(activity, OnCompleteListener {task->
-                Toaster().loginToast(task.isSuccessful, activity)
-            })}
-        catch (e: Exception){
+    fun loginWithEmailAndPassword(email: String, password: String, activity: Login) {
+        try {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(
+                activity,
+                OnCompleteListener { task ->
+                    Toaster().loginToast(task.isSuccessful, activity)
+                })
+        } catch (e: Exception) {
             Toaster().loginToast(false, activity)
         }
     }
-    fun getCurrentlyLoggedUserUid(): String {
-        return FirebaseAuth.getInstance().currentUser!!.uid
+
+    fun getCurrentlyLoggedUserUid(): String? {
+        return FirebaseAuth.getInstance().currentUser?.uid
     }
 
-    fun addNewExpenseToDb(newExpense: Expense){
+    fun addNewExpenseToDb(newExpense: Expense) {
         Log.i("newExpense", newExpense.toString())
-        mDatabase!!.child("expenses").child(getCurrentlyLoggedUserUid()).push().setValue(newExpense)
+        getCurrentlyLoggedUserUid()?.let {
+            mDatabase!!.child("expenses").child(it).push().setValue(
+                newExpense
+            )
+        }
     }
 
     fun updateGlobalExpensesList() {
-        return FirebaseDatabase.getInstance()
-            .reference.child("expenses").child(getCurrentlyLoggedUserUid()).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        val expense_list = ArrayList<Any>()
-                        for (ds in dataSnapshot.children) {
-                            val expense: Expense? = ds.getValue(Expense::class.java)
-                            if (expense != null) {
-                                expense_list.add(expense)
+        getCurrentlyLoggedUserUid()?.let {
+            FirebaseDatabase.getInstance()
+                .reference.child("expenses").child(it).addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            val expense_list = ArrayList<Any>()
+                            globalExpenseList = expense_list
+                            for (ds in dataSnapshot.children) {
+                                val expense: Expense? =
+                                    ds.getValue(com.example.kotlinprojectpro.models.Expense::class.java)
+                                if (expense != null) {
+                                    globalExpenseList.add(expense)
+                                }
                             }
+                            globalExpenseList.sortBy { (it as Expense).date }
+                            globalExpenseList
+                            val expenses = getAllExpensesValue().toString()
+                            globalExpenseList.remove(0)
+                            globalExpenseList.add(0, expenses)
                         }
-                        globalExpenseList = expense_list
                     }
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })
+        }
     }
 }
