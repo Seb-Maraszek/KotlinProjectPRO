@@ -23,7 +23,9 @@ import androidx.fragment.app.Fragment
 import com.example.kotlinprojectpro.*
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import kotlinx.android.synthetic.main.fragment_charts_page.*
@@ -99,8 +101,13 @@ class ChartsPage : Fragment() {
         yAxis.spaceTop = 20f
         yAxis.spaceBottom = 20f
         yAxis.xOffset = 25f
+        val xxAxis = incomeChart.xAxis;
+        xxAxis.textSize = 20f
+        xxAxis.textColor = Color.parseColor("#ffffff")
+        xxAxis.labelCount = 6
+        xxAxis.position = XAxis.XAxisPosition.BOTTOM
         incomeChart.axisRight.isEnabled = false;
-        incomeChart.xAxis.isEnabled = false;
+        incomeChart.xAxis.isEnabled = true;
         val lege: Legend = incomeChart.legend
         lege.isEnabled = false
         incomeChart.animateX(2000, Easing.EasingOption.EaseOutBack)
@@ -120,13 +127,20 @@ class ChartsPage : Fragment() {
         yAxisd.textColor = Color.parseColor("#ffffff")
         yAxisd.labelCount = 6
         yAxisd.xOffset = 25f
+
         expenseChart.axisRight.isEnabled = false;
         expenseChart.xAxis.isEnabled = true
-
-
+        val xAxis = expenseChart.xAxis;
+        xAxis.textSize = 20f
+        xAxis.textColor = Color.parseColor("#ffffff")
+        xAxis.labelCount = 6
+        expenseChart.extraBottomOffset = 20f
+        incomeChart.extraBottomOffset = 20f
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
         val leged: Legend = expenseChart.legend
         leged.isEnabled = false
         expenseChart.animateX(2000, Easing.EasingOption.EaseOutBack)
+
     }
 
     private fun generateCenterText(text: String, primaryStringColor: String = "#FF03DAC5"): SpannableString? {

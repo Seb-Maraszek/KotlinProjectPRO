@@ -11,6 +11,7 @@ import android.text.style.RelativeSizeSpan
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -25,9 +26,7 @@ import com.example.kotlinprojectpro.ui.budget.BudgetMain
 import com.example.kotlinprojectpro.ui.charts.ChartsPage
 import com.example.kotlinprojectpro.ui.home.HomePageFragment
 import com.example.kotlinprojectpro.ui.settings.SettingsPage
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.data.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DataSnapshot
@@ -39,6 +38,7 @@ import kotlinx.android.synthetic.main.expense_item.*
 import kotlinx.android.synthetic.main.expense_item.view.*
 import kotlinx.android.synthetic.main.fragment_budget_horizontal.*
 import kotlinx.android.synthetic.main.fragment_budget_main.*
+import kotlinx.android.synthetic.main.fragment_charts_page.*
 import kotlinx.android.synthetic.main.fragment_home_horizontal.*
 import kotlinx.android.synthetic.main.fragment_home_page.*
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -47,7 +47,7 @@ import java.util.*
 
 
 class MainFragment : Fragment() {
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(savedInstanceState == null) {
@@ -166,6 +166,8 @@ class MainFragment : Fragment() {
                 )
                 dpd.show()
             }
+
+            @RequiresApi(Build.VERSION_CODES.O)
             fun addExpense(){
                 val titleText = contentView.findViewById<TextInputEditText>(R.id.titleExpenseText)
                 val categoryText = contentView.findViewById<AutoCompleteTextView>(R.id.categoryExpenseText)
@@ -216,6 +218,11 @@ class MainFragment : Fragment() {
                         incomeText.text = "$" + getAllIncomesValue().toString()
                         updateChart()
                     }
+                    if(expenseChart != null) {
+                        expenseChart.data = getEntriesLineChartExpenses()
+                        expenseChart.data.setValueTextColor(0)
+                        expenseChart.invalidate()
+                    }
 
                 } else {
                     Toast.makeText(
@@ -236,6 +243,40 @@ class MainFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getEntriesLineChartExpenses(): LineData {
+        var lastWeekExpenses: ArrayList<Any> = ArrayList()
+        for (i in 0..6){
+            lastWeekExpenses.add(getLastWeekExpenses(i))
+        }
+        val bubbleEntries = ArrayList<Entry>()
+        for (i in 0..6){
+            var expense = lastWeekExpenses[i] as Int
+            bubbleEntries.add(Entry(i.toFloat(), expense.toFloat()))
+        }
+
+        val ds1 = LineDataSet(bubbleEntries, "Expense")
+        categoriesChart.setEntryLabelTextSize(0f);
+        ds1.valueTextSize = 20f
+        ds1.valueTextColor = Color.WHITE
+        ds1.mode = LineDataSet.Mode.CUBIC_BEZIER
+        ds1.setDrawFilled(true)
+        ds1.setCircleColor(ContextCompat.getColor(context!!, R.color.primary))
+        ds1.setCircleColorHole(ContextCompat.getColor(context!!, R.color.primary))
+        ds1.fillColor = ContextCompat.getColor(context!!, R.color.teal_700)
+        ds1.colors = getColors()
+        return LineData(ds1)
+    }
+
+    private fun getColors(): ArrayList<Int> {
+        val colors = ArrayList<Int>()
+        colors.add(getColorForName(context!!, "grocery"))
+        colors.add(getColorForName(context!!, "hobbies"))
+        colors.add(getColorForName(context!!, "taxes"))
+        colors.add(getColorForName(context!!, "other"))
+        colors.add(getColorForName(context!!, "investments"))
+        return colors
+    }
     private fun updateChart() {
         fun getColors(): ArrayList<Int> {
             val colors = ArrayList<Int>()
