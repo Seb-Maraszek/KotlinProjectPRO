@@ -6,14 +6,14 @@ import com.example.kotlinprojectpro.MainActivity.Companion.globalExpenseList
 import com.example.kotlinprojectpro.MainActivity.Companion.globalIncomeList
 import com.example.kotlinprojectpro.models.Expense
 import com.example.kotlinprojectpro.models.Income
+import com.example.kotlinprojectpro.ui.main.RecyclerViewAdapter
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.auth.User
 import kotlinx.android.synthetic.main.fragment_home_horizontal.*
 import kotlinx.android.synthetic.main.fragment_home_page.*
-
-import java.util.*
-
+import java.util.ArrayList
 
 object FirebaseCommunicator {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -125,29 +125,6 @@ object FirebaseCommunicator {
         }
     }
 
-    fun deleteExpenseFromDb(expenseToDelete: Expense){
-        getCurrentlyLoggedUserUid()?.let {
-            FirebaseDatabase.getInstance()
-                .reference.child("expenses").child(it).addValueEventListener(object :
-                    ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            for (ds in dataSnapshot.children) {
-                                val expense: Expense? =
-                                    ds.getValue(Expense::class.java)
-                                if (expense == expenseToDelete) {
-                                    ds.ref.removeValue()
-                                    return
-                                }
-                            }
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-                })}
-    }
 
     fun addNewIncomeToDb(newIncome: Income){
         getCurrentlyLoggedUserUid()?.let {

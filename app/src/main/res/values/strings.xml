@@ -12,4 +12,6 @@
     <string name="titleText">Title</string>
     <string name="date">Date</string>
     <string name="income_label">Income</string>
+    <string name="facebook_app_id">928552634401040</string>
+    <string name="fb_login_protocol_scheme">fb928552634401040</string>
 </resources>
