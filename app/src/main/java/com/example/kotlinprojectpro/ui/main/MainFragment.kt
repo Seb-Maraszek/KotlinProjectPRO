@@ -13,6 +13,8 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.example.kotlinprojectpro.*
 import com.example.kotlinprojectpro.FirebaseCommunicator.updateGlobalExpensesList
@@ -103,7 +105,6 @@ class MainFragment : Fragment() {
                     }
                 })
         }
-
         addItemBtn.setOnClickListener {
             val contentView = LayoutInflater.from(context).inflate(
                 R.layout.popup_create,
@@ -146,7 +147,17 @@ class MainFragment : Fragment() {
                     context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         val monthDate = monthOfYear + 1
-                        date = "$dayOfMonth.$monthDate.$year"
+                        var convertedDay = "$dayOfMonth"
+                        var convertedMonth = "$monthDate"
+
+                        if(dayOfMonth < 10){
+                            convertedDay = "0$dayOfMonth"
+                        }
+                        if(monthDate < 10){
+                            convertedMonth = "0$monthDate"
+                        }
+
+                        date = convertedDay+"."+convertedMonth+".$year"
                         editDate.setText(date)
                     },
                     year,

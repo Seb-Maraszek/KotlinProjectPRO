@@ -61,11 +61,11 @@ class BudgetHorizontal : Fragment() {
         }
         percentageBudgetHorizontal.legend.isEnabled = false
         list.add(Category(1000, "Food", 10))
-        list.add(Category(1200, "Hobbies", 20))
-        list.add(Category(1500, "Food", 40))
-        list.add(Category(1000, "Food", 90))
-        list.add(Category(1200, "Hobbies", 75))
-        list.add(Category(1500, "Food", 23))
+        list.add(Category(1200, "Hobbies", 10))
+        list.add(Category(1500, "Food", 10))
+        list.add(Category(1000, "Food", 10))
+        list.add(Category(1200, "Hobbies", 10))
+        list.add(Category(1500, "Food", 10))
         budgetCategoriesRecycler.layoutManager = LinearLayoutManager(context)
         budgetCategoriesRecycler.adapter = CategoryRecyclerAdapter(list) {
             null
@@ -127,7 +127,17 @@ class BudgetHorizontal : Fragment() {
                     context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         val monthDate = monthOfYear + 1
-                        date = "$dayOfMonth.$monthDate.$year"
+                        var convertedDay = "$dayOfMonth"
+                        var convertedMonth = "$monthDate"
+
+                        if(dayOfMonth < 10){
+                            convertedDay = "0$dayOfMonth"
+                        }
+                        if(monthDate < 10){
+                            convertedMonth = "0$monthDate"
+                        }
+
+                        date = convertedDay+"."+convertedMonth+".$year"
                         editDate.setText(date)
                     },
                     year,
