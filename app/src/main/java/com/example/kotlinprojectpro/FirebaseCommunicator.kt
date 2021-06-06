@@ -126,6 +126,30 @@ object FirebaseCommunicator {
     }
 
 
+    fun deleteExpenseFromDb(expenseToDelete: Expense){
+        getCurrentlyLoggedUserUid()?.let {
+            FirebaseDatabase.getInstance()
+                .reference.child("expenses").child(it).addValueEventListener(object :
+                    ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (ds in dataSnapshot.children) {
+                                val expense: Expense? =
+                                    ds.getValue(Expense::class.java)
+                                if (expense == expenseToDelete) {
+                                    ds.ref.removeValue()
+                                    return
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })}
+    }
+
     fun addNewIncomeToDb(newIncome: Income){
         getCurrentlyLoggedUserUid()?.let {
             mDatabase!!.child("incomes").child(it).push().setValue(
