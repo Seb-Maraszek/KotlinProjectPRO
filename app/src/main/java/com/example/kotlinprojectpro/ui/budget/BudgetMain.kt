@@ -1,6 +1,7 @@
 package com.example.kotlinprojectpro.ui.budget
 
 import CategoryRecyclerAdapter
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.graphics.Color
@@ -45,7 +46,8 @@ class BudgetMain : Fragment() {
         updateGlobalExpensesList()
         return inflater.inflate(R.layout.fragment_budget_main, container, false)
     }
-    private var list = ArrayList<Category>()
+    private var list = getExpensesByCategory()
+    @SuppressLint("InflateParams")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         percentageBudget.description.isEnabled = false
@@ -63,12 +65,6 @@ class BudgetMain : Fragment() {
             percentageBudget.data.setValueTextColor(0)
         }
         percentageBudget.legend.isEnabled = false
-        list.add(Category(1000, "Food"))
-        list.add(Category(1200, "Hobbies"))
-        list.add(Category(1500, "Food"))
-        list.add(Category(1000, "Food"))
-        list.add(Category(1200, "Hobbies"))
-        list.add(Category(1500, "Food"))
         budgetCategoriesRecycler.layoutManager = LinearLayoutManager(context)
         budgetCategoriesRecycler.adapter = CategoryRecyclerAdapter(list) {
             null
@@ -134,7 +130,17 @@ class BudgetMain : Fragment() {
                     context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         val monthDate = monthOfYear + 1
-                        date = "$dayOfMonth.$monthDate.$year"
+                        var convertedDay = "$dayOfMonth"
+                        var convertedMonth = "$monthDate"
+
+                        if(dayOfMonth < 10){
+                            convertedDay = "0$dayOfMonth"
+                        }
+                        if(monthDate < 10){
+                            convertedMonth = "0$monthDate"
+                        }
+
+                        date = convertedDay+"."+convertedMonth+".$year"
                         editDate.setText(date)
                     },
                     year,

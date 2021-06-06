@@ -1,23 +1,26 @@
 package com.example.kotlinprojectpro.ui.charts
 
 import android.R.color
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Shader
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.kotlinprojectpro.R
-import com.example.kotlinprojectpro.getColorForName
+import com.example.kotlinprojectpro.*
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
@@ -27,6 +30,11 @@ import kotlinx.android.synthetic.main.fragment_charts_page.*
 
 
 class ChartsPage : Fragment() {
+    var lastWeekExpenses: ArrayList<Any> = ArrayList()
+    var lastWeekIncomes: ArrayList<Any> = ArrayList()
+    @SuppressLint("NewApi")
+    var lastWeekDates = getLastWeekDates()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,11 +43,22 @@ class ChartsPage : Fragment() {
     }
 
 
+    @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        for (i in 0..6){
+            lastWeekExpenses.add(getLastWeekExpenses(i))
+            lastWeekIncomes.add(getLastWeekIncome(i))
+        }
+
+        Log.i("LastWeekDates", lastWeekDates.toString())
+        Log.i("LastWeekExpenses", lastWeekExpenses.toString())
+        Log.i("LastWeekIncomes", lastWeekIncomes.toString())
+
         super.onViewCreated(view, savedInstanceState)
         categoriesChart.description.isEnabled = false
-        categoriesChart.centerText = generateCenterText("1771")
+        val value = getAllExpensesValue()
+        categoriesChart.centerText = generateCenterText(value.toString()+"\nSPENT")
         categoriesChart.setCenterTextSize(16f)
         categoriesChart.holeRadius = 60f
         categoriesChart.setHoleColor(0)
@@ -54,7 +73,8 @@ class ChartsPage : Fragment() {
             }
 
             override fun onNothingSelected() {
-                categoriesChart.centerText = generateCenterText("1771\nWYDANE")
+                val value = getAllExpensesValue()
+                categoriesChart.centerText = generateCenterText(value.toString()+"\nSPENT")
             }
         })
 
@@ -101,7 +121,9 @@ class ChartsPage : Fragment() {
         yAxisd.labelCount = 6
         yAxisd.xOffset = 25f
         expenseChart.axisRight.isEnabled = false;
-        expenseChart.xAxis.isEnabled = false;
+        expenseChart.xAxis.isEnabled = true
+
+
         val leged: Legend = expenseChart.legend
         leged.isEnabled = false
         expenseChart.animateX(2000, Easing.EasingOption.EaseOutBack)
@@ -118,11 +140,11 @@ class ChartsPage : Fragment() {
 
     private fun getEntries(): PieData {
         val bubbleEntries = ArrayList<PieEntry>()
-        bubbleEntries.add(PieEntry(650.15F, "grocery"))
-        bubbleEntries.add(PieEntry(500F, "hobbies"))
-        bubbleEntries.add(PieEntry(320.43F, "taxes"))
-        bubbleEntries.add(PieEntry(201.20F, "investmets"))
-        bubbleEntries.add(PieEntry(150F, "other"))
+        for (item in MainActivity.allCategoriesNames){
+            val expense = getExpensesForCategory(item)
+            if (expense.value !=0){
+                bubbleEntries.add(PieEntry(expense.value.toFloat(), expense.category))}
+        }
         val ds1 = PieDataSet(bubbleEntries, "Spożywcze")
         categoriesChart.setEntryLabelTextSize(0f);
         ds1.valueTextSize = 25f
@@ -134,11 +156,11 @@ class ChartsPage : Fragment() {
 
     private fun getEntriesLineChart(): LineData {
         val bubbleEntries = ArrayList<Entry>()
-        bubbleEntries.add(Entry(1F, 15F))
-        bubbleEntries.add(Entry(2F, 10F))
-        bubbleEntries.add(Entry(3F, 30F))
-        bubbleEntries.add(Entry(5F, 5F))
-        bubbleEntries.add(Entry(6F, 50F))
+        for (i in 0..6){
+            var income = lastWeekIncomes[i] as Int
+            bubbleEntries.add(Entry(i.toFloat(), income.toFloat()))
+        }
+
         val ds1 = LineDataSet(bubbleEntries, "Income")
         categoriesChart.setEntryLabelTextSize(0f);
         ds1.valueTextSize = 20f
@@ -153,13 +175,14 @@ class ChartsPage : Fragment() {
     }
 
     private fun getEntriesLineChartExpenses(): LineData {
+
         val bubbleEntries = ArrayList<Entry>()
-        bubbleEntries.add(Entry(1F, 98F))
-        bubbleEntries.add(Entry(2F, 12F))
-        bubbleEntries.add(Entry(3F, 34F))
-        bubbleEntries.add(Entry(5F, 58F))
-        bubbleEntries.add(Entry(6F, 53F))
-        val ds1 = LineDataSet(bubbleEntries, "Income")
+        for (i in 0..6){
+            var expense = lastWeekExpenses[i] as Int
+            bubbleEntries.add(Entry(i.toFloat(), expense.toFloat()))
+        }
+
+        val ds1 = LineDataSet(bubbleEntries, "Expense")
         categoriesChart.setEntryLabelTextSize(0f);
         ds1.valueTextSize = 20f
         ds1.valueTextColor = Color.WHITE

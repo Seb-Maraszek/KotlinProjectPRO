@@ -132,7 +132,17 @@ class HorizontalFragment : Fragment() {
                     context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         val monthDate = monthOfYear + 1
-                        date = "$dayOfMonth.$monthDate.$year"
+                        var convertedDay = "$dayOfMonth"
+                        var convertedMonth = "$monthDate"
+
+                        if(dayOfMonth < 10){
+                            convertedDay = "0$dayOfMonth"
+                        }
+                        if(monthDate < 10){
+                            convertedMonth = "0$monthDate"
+                        }
+
+                        date = convertedDay+"."+convertedMonth+".$year"
                         editDate.setText(date)
                     },
                     year,

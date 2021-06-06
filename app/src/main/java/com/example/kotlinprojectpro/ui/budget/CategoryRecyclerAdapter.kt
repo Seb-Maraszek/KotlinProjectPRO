@@ -15,6 +15,7 @@ class CategoryRecyclerAdapter(val list: ArrayList<Category>, val listener: (Cate
         fun bind(category: Category) = with(itemView) {
             valueCategory.text = category.value.toString()
             categoryTitle.text = category.category
+            linear.progress = category.progress
         }
     }
 

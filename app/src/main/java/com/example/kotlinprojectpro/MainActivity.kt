@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var globalExpenseList: ArrayList<Any> = ArrayList()
         var globalIncomeList: ArrayList<Any> = ArrayList()
+        var allCategoriesNames = listOf("Food",
+            "IT", "Car", "Hobbies", "Investing", "Education", "Healthcare")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
