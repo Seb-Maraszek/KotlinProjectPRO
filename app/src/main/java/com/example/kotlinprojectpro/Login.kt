@@ -28,6 +28,10 @@ class Login : AppCompatActivity() {
                         if (task.isSuccessful) {
                             val user = auth.currentUser
                             startActivity(Intent(this, MainActivity::class.java))
+                            Toast.makeText(
+                                baseContext, "Authentication goooood.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             Toast.makeText(
                                 baseContext, "Authentication failed.",
@@ -35,11 +39,26 @@ class Login : AppCompatActivity() {
                             ).show()
                         }
                     }
+
+            } else {
+                Toast.makeText(
+                    baseContext, "Authentication failed.",
+                    Toast.LENGTH_SHORT)
+            }
+        }
+        registerUser.setOnClickListener{
+            val email = findViewById<EditText>(R.id.emailEditText).text.toString()
+            val password = findViewById<EditText>(R.id.editTextPassword).text.toString()
+            if (email != "" || password != "") {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             val user = auth.currentUser
                             startActivity(Intent(this, MainActivity::class.java))
+                            Toast.makeText(
+                                baseContext, "Authentication goooood.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             Toast.makeText(
                                 baseContext, "Authentication failed.",
@@ -52,6 +71,7 @@ class Login : AppCompatActivity() {
                     baseContext, "Authentication failed.",
                     Toast.LENGTH_SHORT)
             }
+
         }
         if(auth.currentUser != null){
             startActivity(Intent(this, MainActivity::class.java))

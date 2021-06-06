@@ -63,12 +63,12 @@ class BudgetMain : Fragment() {
             percentageBudget.data.setValueTextColor(0)
         }
         percentageBudget.legend.isEnabled = false
-        list.add(Category(1000, "Food"))
-        list.add(Category(1200, "Hobbies"))
-        list.add(Category(1500, "Food"))
-        list.add(Category(1000, "Food"))
-        list.add(Category(1200, "Hobbies"))
-        list.add(Category(1500, "Food"))
+        list.add(Category(1000, "Food", 20))
+        list.add(Category(1200, "Hobbies", 30))
+        list.add(Category(1500, "Food", 10))
+        list.add(Category(1000, "Food", 50))
+        list.add(Category(1200, "Hobbies", 10))
+        list.add(Category(1500, "Food", 90))
         budgetCategoriesRecycler.layoutManager = LinearLayoutManager(context)
         budgetCategoriesRecycler.adapter = CategoryRecyclerAdapter(list) {
             null
@@ -165,7 +165,10 @@ class BudgetMain : Fragment() {
 
     private fun getEntries(): PieData {
         val entries = ArrayList<PieEntry>()
-        val percentage = getAllExpensesValue().toFloat() / getAllIncomesValue().toFloat() * 100
+        var percentage = getAllExpensesValue().toFloat() / getAllIncomesValue().toFloat() * 100
+        if(percentage > 100) {
+            percentage = 100F
+        }
         entries.add(PieEntry(percentage))
         entries.add(PieEntry(100F - percentage))
         val dataSet = PieDataSet(entries, "Spent budget")
