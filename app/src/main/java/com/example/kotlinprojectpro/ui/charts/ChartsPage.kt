@@ -1,13 +1,7 @@
 package com.example.kotlinprojectpro.ui.charts
 
-import android.R.color
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Paint
-import android.graphics.Shader
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
@@ -102,9 +96,11 @@ class ChartsPage : Fragment() {
         yAxis.spaceBottom = 20f
         yAxis.xOffset = 25f
         val xxAxis = incomeChart.xAxis;
-        xxAxis.textSize = 20f
+        xxAxis.textSize = 12f
         xxAxis.textColor = Color.parseColor("#ffffff")
         xxAxis.labelCount = 6
+        xxAxis.valueFormatter =
+            IAxisValueFormatter { value, axis -> lastWeekDates[value.toInt()].toString().substring(0,5) }
         xxAxis.position = XAxis.XAxisPosition.BOTTOM
         incomeChart.axisRight.isEnabled = false;
         incomeChart.xAxis.isEnabled = true;
@@ -131,9 +127,11 @@ class ChartsPage : Fragment() {
         expenseChart.axisRight.isEnabled = false;
         expenseChart.xAxis.isEnabled = true
         val xAxis = expenseChart.xAxis;
-        xAxis.textSize = 20f
+        xAxis.textSize = 12f
         xAxis.textColor = Color.parseColor("#ffffff")
         xAxis.labelCount = 6
+        xAxis.valueFormatter =
+            IAxisValueFormatter { value, axis -> lastWeekDates[value.toInt()].toString().substring(0,5) }
         expenseChart.extraBottomOffset = 20f
         incomeChart.extraBottomOffset = 20f
         xAxis.position = XAxis.XAxisPosition.BOTTOM
