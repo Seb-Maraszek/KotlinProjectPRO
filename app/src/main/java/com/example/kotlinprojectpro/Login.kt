@@ -24,10 +24,12 @@ import java.security.MessageDigest
 
 class Login : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+    var callbackManager:CallbackManager?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         auth = Firebase.auth
+        callbackManager = CallbackManager.Factory.create()
         loginUser.setOnClickListener {
             val email = findViewById<EditText>(R.id.emailEditText).text.toString()
             val password = findViewById<EditText>(R.id.editTextPassword).text.toString()
@@ -93,7 +95,7 @@ class Login : AppCompatActivity() {
     }
 
     private fun signIn() {
-        loginUserFB.registerCallback(CallbackManager.Factory.create(),object:FacebookCallback<LoginResult>{
+        loginUserFB.registerCallback(callbackManager,object:FacebookCallback<LoginResult>{
             override fun onSuccess(result: LoginResult?) {
                 handleFacebookAccessToken(result!!.accessToken)
             }
@@ -117,14 +119,20 @@ class Login : AppCompatActivity() {
         }
             .addOnSuccessListener { result ->
                 val email = result.user.email
-                Toast.makeText(this, "email logged: "+email, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "email logged: "+ email, Toast.LENGTH_LONG).show()
+                val user = auth.currentUser
+                startActivity(Intent(this, MainActivity::class.java))
+                Toast.makeText(
+                    baseContext, "Authentication goooood.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        CallbackManager.Factory.create().onActivityResult(requestCode, resultCode, data)
+        callbackManager!!.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun findKey() {
