@@ -6,10 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.kotlinprojectpro.FirebaseCommunicator
 import com.example.kotlinprojectpro.Login
 import com.example.kotlinprojectpro.R
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_home_horizontal.*
 import kotlinx.android.synthetic.main.fragment_settings_horizontal.*
+import kotlinx.android.synthetic.main.fragment_settings_horizontal.textView4
 import kotlinx.android.synthetic.main.fragment_settings_page.*
 
 class SettingsHorizontal : Fragment() {
@@ -23,6 +26,8 @@ class SettingsHorizontal : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val textField = textView4
+        textField.text = FirebaseCommunicator.getCurrentlyLoggedInUser()
         buttonLogoutHorizontal.setOnClickListener{
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(context, Login::class.java)

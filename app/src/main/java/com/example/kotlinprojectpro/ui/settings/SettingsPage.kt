@@ -6,10 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.kotlinprojectpro.FirebaseCommunicator
 import com.example.kotlinprojectpro.Login
 import com.example.kotlinprojectpro.R
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_home_page.*
 import kotlinx.android.synthetic.main.fragment_settings_page.*
+import kotlinx.android.synthetic.main.fragment_settings_page.textView4
 
 class SettingsPage : Fragment() {
     override fun onCreateView(
@@ -20,6 +23,8 @@ class SettingsPage : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val textField = textView4
+        textField.text = FirebaseCommunicator.getCurrentlyLoggedInUser()
         buttonLogout.setOnClickListener{
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(context, Login::class.java)
